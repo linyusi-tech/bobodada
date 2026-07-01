@@ -256,6 +256,8 @@
 				var image = document.createElement('img');
 				image.src = imagePath;
 				image.alt = getCardTitle(card);
+				image.loading = 'lazy';
+				image.decoding = 'async';
 				figure.appendChild(image);
 			} else {
 				var label = document.createElement('span');
@@ -393,6 +395,8 @@
 				var image = document.createElement('img');
 				image.src = card.dataset.image;
 				image.alt = getCardTitle(card);
+				image.loading = 'lazy';
+				image.decoding = 'async';
 				slot.appendChild(image);
 			}
 
