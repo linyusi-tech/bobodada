@@ -1,2 +1,5 @@
 tmp-screens/
 .DS_Store
+.env
+.env.local
+data/

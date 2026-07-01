@@ -11,17 +11,22 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<meta name="description" content="给波波的 36 周岁生日惊喜网站" />
 		<link rel="stylesheet" href="assets/css/main.css" />
-		<link rel="stylesheet" href="assets/css/bobo.css" />
+		<link rel="stylesheet" href="assets/css/bobo.css?v=20260701-polish3" />
 		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
 	</head>
 	<body class="is-preload">
+		<audio id="birthdayMusic" loop preload="auto" autoplay playsinline>
+			<source src="audio/bobo-birthday-sparkle.mp3" type="audio/mpeg" />
+			<source src="audio/bobo-birthday-sparkle.m4a" type="audio/mp4" />
+		</audio>
+		<button class="music-toggle" id="musicToggle" type="button" aria-pressed="false">播放音乐</button>
 		<div id="page-wrapper">
 			<div id="wrapper">
 
 				<section class="panel banner right birthday-gate" id="wish">
 					<div class="content color0 span-3-75">
 						<p class="kicker">1990.07.02 / 2026.07.02</p>
-						<h1 class="major">波波，<br />生日快乐</h1>
+						<h1 class="major">波波<br />生日快乐</h1>
 						<div class="gate-module">
 							<div class="gate-status" id="gateStatus">点亮麦克风后，对着屏幕轻轻吹气。</div>
 							<ul class="actions gate-actions">
@@ -59,56 +64,62 @@
 					</div>
 				</section>
 
-				<section class="panel spotlight large right chronicle-cover" id="chronicle">
-					<div class="content span-7">
-						<p class="kicker">Chronicle</p>
-						<h2 class="major">波波编年史</h2>
-						<p>从 1990 的第一声问候，到往后许多年还会一起写下的愿望。答对一题，就点亮一张记忆卡。</p>
-					</div>
-					<div class="image filtered tinted" data-position="center">
-						<img src="images/pic02.jpg" alt="" />
-					</div>
-				</section>
-
-				<section class="panel color1 chronicle-panel">
-					<div class="inner columns aligned timeline-board">
-						<article class="memory-card span-2-5" data-card="1990">
-							<p class="year">1990.07.02</p>
-							<h3>波波降落日</h3>
-							<p>这一日，哪颗小星星悄悄落进了人间剧本？</p>
-							<div class="choices">
-								<button type="button">睡过头，改签到 7 月 3 日</button>
-								<button type="button" data-correct="true">波波正式登场</button>
-								<button type="button">提前一天敲错了星球门</button>
-								<button type="button">带着一张空白试卷路过</button>
-							</div>
-							<div class="memory-reveal">答对啦。1990 年 7 月 2 日，波波正式抵达人间，后来负责把普通日子过成冒险。</div>
-						</article>
-						<article class="memory-card span-2-5" data-card="meet">
-							<p class="year">2020.06.25</p>
-							<h3>波波和白晨认识</h3>
-							<p>这一天，后来所有热闹的故事，从哪一个转弯开始？</p>
-							<div class="choices">
-								<button type="button">擦肩而过，还没来得及保存</button>
-								<button type="button">只交换了一句普通寒暄</button>
-								<button type="button" data-correct="true">认识白晨</button>
-								<button type="button">误把命运当成了路人</button>
-							</div>
-							<div class="memory-reveal">是她。那天之后，波波的时间线开始有了双人模式。</div>
-						</article>
-						<aside class="collection-card span-4" id="collection">
-							<p class="kicker">Album</p>
-							<h2 class="major">爱心相册</h2>
-							<p>每答对一题，一张记忆卡就会回到这里。它们会慢慢拼成一颗心。</p>
+				<section class="panel chronicle-cover" id="chronicle">
+					<div class="chronicle-cover-inner">
+						<div class="chronicle-cover-copy">
+							<p class="kicker">Chronicle</p>
+							<h2 class="major">波波编年史</h2>
+							<p>从 1990 年 7 月 2 日那一声啼哭开始，<span class="keep-together">时间把波波送到人间</span>，也把后来所有相遇悄悄埋下伏笔。答对一题，就点亮一张记忆卡。</p>
+						</div>
+						<aside class="collection-card" id="collection">
+							<button class="collection-close" id="collectionClose" type="button" aria-label="关闭照片墙">关闭</button>
+							<p class="kicker">Photo Wall</p>
+							<h2 class="major">点亮照片墙</h2>
+							<p>每答对一题，一张记忆卡就会回到这里。它们会像散落的星光一样，慢慢亮成一面照片墙。</p>
 							<div class="collection-meter" aria-live="polite">
 								<strong id="collectedCount">0</strong>
 								<span>/</span>
 								<span id="totalCards">0</span>
 								<small>张已点亮</small>
 							</div>
+							<button class="button reset-progress-button" id="resetProgressButton" type="button">重置调试</button>
 							<div class="collection-heart" id="collectionHeart" aria-label="已收集的记忆卡"></div>
 						</aside>
-						<article class="memory-card span-2-5" data-card="first-birthday">
+					</div>
+				</section>
+
+				<section class="panel color1 chronicle-panel">
+					<button class="collection-float" id="collectionFloat" type="button" aria-controls="collection" aria-expanded="false">
+						<span>Photo Wall</span>
+						<strong>点亮照片墙</strong>
+						<em><b id="floatCollectedCount">0</b>/<b id="floatTotalCards">0</b></em>
+					</button>
+					<div class="inner columns aligned timeline-board">
+						<article class="memory-card span-2-5" data-card="1990" data-image="photos/generated/animated-film/cartoon-1990-bobo-arrival.jpg">
+							<p class="year">1990.07.02</p>
+							<h3>波波降落日</h3>
+							<p>这一天，家里的新主角怎样登场？</p>
+							<div class="choices">
+								<button type="button">奶瓶先到一步</button>
+								<button type="button" data-correct="true">波波正式登场</button>
+								<button type="button">名字还在路上</button>
+								<button type="button">全家开始抢抱</button>
+							</div>
+							<div class="memory-reveal">答对啦。1990 年 7 月 2 日，波波正式抵达人间，后来负责把普通日子过成冒险。</div>
+						</article>
+						<article class="memory-card span-2-5" data-card="meet" data-image="photos/web/200625.jpg">
+							<p class="year">2020.06.25</p>
+							<h3>波波和雨思认识</h3>
+							<p>这一天，后来所有热闹的故事，从哪一个转弯开始？</p>
+							<div class="choices">
+								<button type="button">擦肩而过，还没来得及保存</button>
+								<button type="button">只交换了一句普通寒暄</button>
+								<button type="button" data-correct="true">认识雨思</button>
+								<button type="button">误把命运当成了路人</button>
+							</div>
+							<div class="memory-reveal">是她。那天之后，波波的时间线开始有了双人模式。</div>
+						</article>
+						<article class="memory-card span-2-5" data-card="first-birthday" data-image="photos/web/200702.jpg">
 							<p class="year">2020.07.02</p>
 							<h3>第一个生日</h3>
 							<p>这一年的生日，蜡烛旁边第一次多了哪一种认真？</p>
@@ -120,19 +131,19 @@
 							</div>
 							<div class="memory-reveal">就是未来老婆。生日从这年开始，不只是长大一岁，也是有人认真记得你。</div>
 						</article>
-						<article class="memory-card span-2-5" data-card="her-birthday">
+						<article class="memory-card span-2-5" data-card="her-birthday" data-image="photos/web/200913.jpg">
 							<p class="year">2020.09.13</p>
 							<h3>厨房里的心意</h3>
-							<p>为了把喜欢端上桌，这一天波波悄悄练成了哪门手艺？</p>
+							<p>为了把喜欢端上桌，波波偷偷练了什么？</p>
 							<div class="choices">
-								<button type="button">研究生日菜单</button>
+								<button type="button">把盐当糖研究</button>
 								<button type="button" data-correct="true">学习做菜</button>
-								<button type="button">偷偷练习摆盘</button>
-								<button type="button">假装熟悉厨房动线</button>
+								<button type="button">和锅铲谈判</button>
+								<button type="button">把鸡蛋煎成地图</button>
 							</div>
 							<div class="memory-reveal">答对。那不是简单学做菜，是把喜欢变成可以端上桌的东西。</div>
 						</article>
-						<article class="memory-card span-2-5" data-card="proposal">
+						<article class="memory-card span-2-5" data-card="proposal" data-image="photos/web/210625.jpg">
 							<p class="year">2021.06.25</p>
 							<h3>一句话变成一生</h3>
 							<p>相遇满一年的暗号里，波波把哪句话递给了未来？</p>
@@ -144,7 +155,7 @@
 							</div>
 							<div class="memory-reveal">是求婚。刚好一年，像宇宙把日期折成了一个漂亮的暗号。</div>
 						</article>
-						<article class="memory-card span-2-5" data-card="marriage">
+						<article class="memory-card span-2-5" data-card="marriage" data-image="photos/web/210701.jpg">
 							<p class="year">2021.07.01</p>
 							<h3>盖章的夏天</h3>
 							<p>那个夏天，两个人把心意交给了哪一种正式仪式？</p>
@@ -156,7 +167,31 @@
 							</div>
 							<div class="memory-reveal">答对啦。2021 年 7 月 1 日，红本本盖章，从此“我们”有了官方字体。</div>
 						</article>
-						<article class="memory-card span-2-5" data-card="cat">
+						<article class="memory-card span-2-5" data-card="hainan-wedding-photo" data-image="photos/web/210827.jpg">
+							<p class="year">2021.08.27</p>
+							<h3>海风把誓言吹亮</h3>
+							<p>热浪和海浪一起作证。你们去了一座很适合把爱拍得闪闪发光的岛，留下了第一组像电影一样的合影。</p>
+							<div class="choices">
+								<button type="button" data-correct="true">去海南拍结婚照</button>
+								<button type="button">去三亚看海景婚礼</button>
+								<button type="button">去厦门拍婚纱照</button>
+								<button type="button">去青岛试穿礼服</button>
+							</div>
+							<div class="memory-reveal">这张照片像把海风装进了相册里，连笑意都带着一点咸甜。</div>
+						</article>
+						<article class="memory-card span-2-5" data-card="shanghai-small-wedding" data-image="photos/web/211205.jpg">
+							<p class="year">2021.12.05</p>
+							<h3>冬日里的小礼成</h3>
+							<p>年底的上海，冷风很硬，心意很软。那天不靠盛大喧闹，只把以后认真写进同一天。</p>
+							<div class="choices">
+								<button type="button" data-correct="true">在上海办小婚礼</button>
+								<button type="button">在上海领结婚证</button>
+								<button type="button">在上海拍周年照</button>
+								<button type="button">在上海办订婚宴</button>
+							</div>
+							<div class="memory-reveal">小小一场，刚刚好地把两个人的以后，安安稳稳地收进同一天。</div>
+						</article>
+						<article class="memory-card span-2-5" data-card="cat" data-image="photos/web/211225.jpg">
 							<p class="year">2021.12.25</p>
 							<h3>圣诞来的弟弟</h3>
 							<p>圣诞节没有只送礼物，还把哪份毛茸茸的热闹送进了家？</p>
@@ -168,7 +203,19 @@
 							</div>
 							<div class="memory-reveal">是弟弟。别人拆礼物，你们收获了一位会占沙发、占心里的家人。</div>
 						</article>
-						<article class="memory-card span-2-5" data-card="home-done">
+						<article class="memory-card span-2-5" data-card="chongming-cat-trip" data-image="photos/web/220630.jpg">
+							<p class="year">2022.06.30</p>
+							<h3>猫猫也来度假</h3>
+							<p>夏天刚刚站稳脚跟，你们带着毛茸茸成员，去了一个风里有水气、路也很适合发呆的地方。</p>
+							<div class="choices">
+								<button type="button" data-correct="true">带猫猫去崇明</button>
+								<button type="button">带猫猫去舟山</button>
+								<button type="button">带猫猫去莫干山</button>
+								<button type="button">带猫猫去苏州</button>
+							</div>
+							<div class="memory-reveal">猫猫的旅行镜头感很强，仿佛它也在认真参与家庭合影。</div>
+						</article>
+						<article class="memory-card span-2-5" data-card="home-done" data-image="photos/web/240413.jpg">
 							<p class="year">2024.04.13</p>
 							<h3>家终于长成</h3>
 							<p>那一天，钥匙、灯光和房间一起等来了哪次收尾？</p>
@@ -180,19 +227,91 @@
 							</div>
 							<div class="memory-reveal">答对。新家装修完成，日子终于有了可以慢慢回声的房间。</div>
 						</article>
-						<article class="memory-card span-2-5" data-card="pregnancy">
+						<article class="memory-card span-2-5" data-card="malaysia-trip" data-image="photos/web/240627.jpg">
+							<p class="year">2024.06.27</p>
+							<h3>热带风与旧笑声</h3>
+							<p>这一站带着一点异国的颜色，阳光更热，空气更甜，连散步都像走进度假片里。</p>
+							<div class="choices">
+								<button type="button" data-correct="true">一起去马来西亚玩</button>
+								<button type="button">一起去泰国玩</button>
+								<button type="button">一起去新加坡玩</button>
+								<button type="button">一起去巴厘岛玩</button>
+							</div>
+							<div class="memory-reveal">照片里那种放松，不是摆出来的，是旅行本身替你们松了肩膀。</div>
+						</article>
+						<article class="memory-card span-2-5" data-card="cat-acupuncture" data-image="photos/web/241227.jpg">
+							<p class="year">2024.12.27</p>
+							<h3>给猫妹妹的小问诊</h3>
+							<p>年末那次，主角不是人类，而是一位有点娇气、但全家都会心疼的小成员。</p>
+							<div class="choices">
+								<button type="button" data-correct="true">带猫妹妹去针灸</button>
+								<button type="button">带猫妹妹去体检</button>
+								<button type="button">带猫妹妹去洗牙</button>
+								<button type="button">带猫妹妹去理毛</button>
+							</div>
+							<div class="memory-reveal">小家伙虽然不懂人生，但它肯定记得那天全家都在替它紧张。</div>
+						</article>
+						<article class="memory-card span-2-5" data-card="pregnancy" data-image="photos/web/250222.jpg">
 							<p class="year">2025.02.22</p>
 							<h3>两个人变成三个人的秘密</h3>
-							<p>在白色走廊和怦怦心跳之间，未来悄悄亮出了什么信号？</p>
+							<p>在医院走廊里，未来递来了什么信号？</p>
 							<div class="choices">
-								<button type="button">报告还要明天再看</button>
+								<button type="button">血值有点特别</button>
 								<button type="button" data-correct="true">测出怀孕</button>
-								<button type="button">只是普通体检过关</button>
-								<button type="button">医生说先回家休息</button>
+								<button type="button">报告建议复查</button>
+								<button type="button">医生多问两句</button>
 							</div>
 							<div class="memory-reveal">答对。2025 年 2 月 22 日，一个小小的生命，开始把未来轻轻敲响。</div>
 						</article>
-						<article class="memory-card span-2-5" data-card="wuxian">
+						<article class="memory-card span-2-5" data-card="first-car" data-image="photos/web/250605.jpg">
+							<p class="year">2025.06.05</p>
+							<h3>新车缓缓到站</h3>
+							<p>这一回，不是去接谁回家，而是家里多了一个会跑、会等红灯的伙伴。</p>
+							<div class="choices">
+								<button type="button" data-correct="true">第一辆车提车</button>
+								<button type="button">第二辆车到家</button>
+								<button type="button">第一次租车出行</button>
+								<button type="button">提了一辆二手油车</button>
+							</div>
+							<div class="memory-reveal">从这一天起，路不只是路了，还成了你们一起出发的理由。</div>
+						</article>
+						<article class="memory-card span-2-5" data-card="first-son-smile" data-image="photos/web/250618.jpg">
+							<p class="year">2025.06.18</p>
+							<h3>笑意第一次亮灯</h3>
+							<p>这一页的线索很轻，轻到只要一瞬间，就能把人心口照得很热。</p>
+							<div class="choices">
+								<button type="button" data-correct="true">第一次看到儿子笑</button>
+								<button type="button">第一次看到儿子翻身</button>
+								<button type="button">第一次听见儿子喊人</button>
+								<button type="button">第一次看到儿子睡整觉</button>
+							</div>
+							<div class="memory-reveal">那一笑太有分量了，像把整个家都轻轻点亮了一下。</div>
+						</article>
+						<article class="memory-card span-2-5" data-card="yunnan-guizhou-trip" data-image="photos/web/250621.jpg">
+							<p class="year">2025.06.21</p>
+							<h3>山水与肚子里的风</h3>
+							<p>这一次，队伍里既有糕糕，也有正在悄悄长大的小成员。一路去看云、看山、看更远的地方。</p>
+							<div class="choices">
+								<button type="button" data-correct="true">去云南玩</button>
+								<button type="button">去四川重庆玩</button>
+								<button type="button">去广西玩</button>
+								<button type="button">去贵州玩</button>
+							</div>
+							<div class="memory-reveal">这趟旅行像把春天和未来一起装进了路上。</div>
+						</article>
+						<article class="memory-card span-2-5" data-card="cats-family-photo" data-image="photos/web/250829.jpg">
+							<p class="year">2025.08.28</p>
+							<h3>四猫一娃的合影时刻</h3>
+							<p>这张照片难度很高，主角很多，秩序很少，但画面却格外完整。</p>
+							<div class="choices">
+								<button type="button" data-correct="true">小无限和四猫全家福</button>
+								<button type="button">小无限和三猫合照</button>
+								<button type="button">宝宝和四猫周岁照</button>
+								<button type="button">全家和四猫旅行照</button>
+							</div>
+							<div class="memory-reveal">这一张很热闹，也很像真正的家：谁都不完全听话，但谁都在场。</div>
+						</article>
+						<article class="memory-card span-2-5" data-card="wuxian" data-image="photos/web/251025.jpg">
 							<p class="year">2025.10.25</p>
 							<h3>小无限出生</h3>
 							<p>那一天，家里终于迎来了哪位小小宇宙居民？</p>
@@ -204,7 +323,7 @@
 							</div>
 							<div class="memory-reveal">是小无限。那一天之后，爱有了更小的手、更亮的眼睛，和更无限的名字。</div>
 						</article>
-						<article class="memory-card span-2-5" data-card="snow-son">
+						<article class="memory-card span-2-5" data-card="snow-son" data-image="photos/web/260227.jpg">
 							<p class="year">2026.02.17</p>
 							<h3>小无限的第一场雪</h3>
 							<p>这一回，波波第一次把孩子抱向了哪一种白色童话？</p>
@@ -216,7 +335,7 @@
 							</div>
 							<div class="memory-reveal">答对。那天雪很白，小无限还很小，波波已经开始把世界一页页翻给他看。</div>
 						</article>
-						<article class="memory-card span-2-5" data-card="rapeseed">
+						<article class="memory-card span-2-5" data-card="rapeseed" data-image="photos/web/260406.jpg">
 							<p class="year">2026.04.06</p>
 							<h3>一片金色花海</h3>
 							<p>春天铺开一大片金黄时，波波带孩子赴了哪场花事？</p>
@@ -228,19 +347,7 @@
 							</div>
 							<div class="memory-reveal">答对。油菜花把春天开得很大，小无限负责把爸爸的心也照亮一点。</div>
 						</article>
-						<article class="memory-card span-2-5" data-card="out-shanghai">
-							<p class="year">2026.04.10</p>
-							<h3>小小远方开始</h3>
-							<p>小小旅人第一次把地图边界，轻轻推到了哪里之外？</p>
-							<div class="choices">
-								<button type="button">第一次去浦东机场</button>
-								<button type="button">第一次住外地酒店</button>
-								<button type="button" data-correct="true">第一次出上海</button>
-								<button type="button">第一次坐长途车</button>
-							</div>
-							<div class="memory-reveal">答对。第一次出上海，远方还不远，但一家人的地图已经开始变大。</div>
-						</article>
-						<article class="memory-card span-2-5" data-card="bigshot-photo">
+						<article class="memory-card span-2-5" data-card="bigshot-photo" data-image="photos/web/260524.jpg">
 							<p class="year">2026.05.24</p>
 							<h3>小无限见世面</h3>
 							<p>这一天，小朋友还没懂江湖，却先收获了哪张很有排面的纪念？</p>
@@ -252,19 +359,7 @@
 							</div>
 							<div class="memory-reveal">答对。小无限还不懂什么叫大佬，但照片已经替他收藏了一点江湖气。</div>
 						</article>
-						<article class="memory-card span-2-5" data-card="graduate-with-son">
-							<p class="year">2026.06.08</p>
-							<h3>一起毕业</h3>
-							<p>这一天，大人和小孩一起完成了哪场并肩仪式？</p>
-							<div class="choices">
-								<button type="button">给儿子戴小小毕业帽</button>
-								<button type="button">抱着儿子拍毕业照</button>
-								<button type="button" data-correct="true">和儿子一起毕业</button>
-								<button type="button">带儿子旁听毕业典礼</button>
-							</div>
-							<div class="memory-reveal">答对。毕业的不只是一个阶段，也是爸爸和儿子一起长大的证明。</div>
-						</article>
-						<article class="memory-card span-2-5 future-card" data-card="abroad">
+						<article class="memory-card span-2-5 future-card" data-card="abroad" data-image="photos/generated/animated-film/cartoon-2027-first-passport.jpg">
 							<p class="year">2027</p>
 							<h3>第一本小护照</h3>
 							<p>未来某一年，护照和飞机会把一家人带向哪一种第一次？</p>
@@ -276,7 +371,7 @@
 							</div>
 							<div class="memory-reveal">预言成立。小无限的世界开始有海关、飞机、外语和爸爸妈妈的手。</div>
 						</article>
-						<article class="memory-card span-2-5 future-card" data-card="daughter">
+						<article class="memory-card span-2-5 future-card" data-card="daughter" data-image="photos/generated/animated-film/cartoon-2028-daughter-arrives.jpg">
 							<p class="year">2028</p>
 							<h3>妹妹抵达</h3>
 							<p>未来的家里，会多出哪一颗温柔的小月亮？</p>
@@ -288,7 +383,7 @@
 							</div>
 							<div class="memory-reveal">预言成立。家里从一儿一女开始，热闹有了新的声部。</div>
 						</article>
-						<article class="memory-card span-2-5 future-card" data-card="big-house">
+						<article class="memory-card span-2-5 future-card" data-card="big-house" data-image="photos/generated/animated-film/cartoon-2031-bigger-home.jpg">
 							<p class="year">2031</p>
 							<h3>房子也长大</h3>
 							<p>当书包、玩具、猫和笑声越来越多，家会迎来哪项升级任务？</p>
@@ -300,7 +395,7 @@
 							</div>
 							<div class="memory-reveal">预言成立。大房子不是为了显得厉害，是为了让笑声、书包和猫都住得下。</div>
 						</article>
-						<article class="memory-card span-2-5 future-card" data-card="thirty-years">
+						<article class="memory-card span-2-5 future-card" data-card="thirty-years" data-image="photos/generated/animated-film/cartoon-2051-thirty-years.jpg">
 							<p class="year">2051</p>
 							<h3>结婚三十年</h3>
 							<p>如果把日子慢慢走成长路，2051 年最值得庆祝的会是什么？</p>
@@ -312,7 +407,7 @@
 							</div>
 							<div class="memory-reveal">预言成立。三十年不是终点，是两个人把日子走成了一条很熟的路。</div>
 						</article>
-						<article class="memory-card span-2-5 future-card" data-card="golden">
+						<article class="memory-card span-2-5 future-card" data-card="golden" data-image="photos/generated/animated-film/cartoon-2071-golden-wedding.jpg">
 							<p class="year">2071</p>
 							<h3>金婚这一页</h3>
 							<p>走过半个世纪以后，两个人会把婚姻酿成哪一种颜色？</p>
@@ -324,7 +419,7 @@
 							</div>
 							<div class="memory-reveal">预言成立。金婚不是金色的奖杯，是每天都还愿意把对方放在心上。</div>
 						</article>
-						<article class="memory-card span-2-5 future-card" data-card="five-generations">
+						<article class="memory-card span-2-5 future-card" data-card="five-generations" data-image="photos/generated/animated-film/cartoon-2090-100th-birthday-male.jpg">
 							<p class="year">2090.07.02</p>
 							<h3>波波一百岁</h3>
 							<p>一百岁那天，围在蛋糕旁边的会是哪幅最热闹的家族画？</p>
@@ -342,7 +437,7 @@
 				<section class="panel color2 exam-panel">
 					<div class="intro joined">
 						<p class="kicker">Exam Paper</p>
-						<h2 class="major">波波老师<br />人生试卷</h2>
+						<h2 class="major exam-title"><span>波波老师</span><span class="exam-title-main">人生试卷</span></h2>
 						<p>这不是判卷，是家里偷偷盖章。每个分数后面，都是日子写给波波的评语。</p>
 					</div>
 					<div class="inner columns aligned score-sheet">
@@ -363,8 +458,8 @@
 
 				<section class="panel spotlight large left question-panel">
 					<div class="content span-5">
-						<p class="kicker">Question Box</p>
-						<h2 class="major">夫妻问答<br />小工具</h2>
+						<p class="kicker">Love Notes</p>
+						<h2 class="major">今晚慢慢聊</h2>
 						<div class="question-draw-area">
 							<div class="question-card is-idle" id="questionCard">
 								<p id="questionText" aria-live="polite">抽一张小纸条，让今晚慢下来一点。答案不用完美，只要是真的。</p>
@@ -379,39 +474,39 @@
 					</div>
 				</section>
 
-				<section class="panel color4-alt wish-panel">
-					<div class="intro color4">
-						<p class="kicker">Wish Pool</p>
-						<h2 class="major">许愿池</h2>
-						<p>把愿望投进水光里。它会先藏起来，再在某个普通日子悄悄冒泡。</p>
-					</div>
-					<div class="inner columns divided">
-						<div class="span-3-25">
+				<section class="panel wish-panel">
+					<div class="wish-panel-shell">
+						<div class="wish-copy">
+							<p class="kicker">Wish Pool</p>
+							<h2 class="major">许愿池</h2>
+							<p>写下一个愿望，万一就实现了呢。</p>
 							<form id="wishForm">
 								<div class="fields">
 									<div class="field">
 										<label for="wishInput">写下一个愿望</label>
-										<textarea name="wishInput" id="wishInput" rows="4">希望 36 岁的波波，被很多温柔的小事包围。</textarea>
+										<textarea name="wishInput" id="wishInput" rows="3" placeholder="把此刻最想要的那件事，轻轻写在这里。"></textarea>
 									</div>
 								</div>
 								<ul class="actions">
-									<li><button class="button primary color1" type="submit">投一枚愿望币</button></li>
+									<li><button class="button primary color1" type="submit">许愿完毕</button></li>
 								</ul>
+								<p class="wish-status" id="wishStatus" role="status" aria-live="polite"></p>
 							</form>
 						</div>
-						<div class="span-3">
-							<div class="wish-pool" id="wishPool" aria-live="polite">
-								<div class="water-ring"></div>
-								<div class="coin coin-one"></div>
-								<div class="coin coin-two"></div>
-								<div class="wish-list" id="wishList"></div>
+						<div class="wish-pool" id="wishPool" aria-live="polite">
+							<div class="pool-basin">
+								<span class="pool-ripple ripple-one"></span>
+								<span class="pool-ripple ripple-two"></span>
+								<span class="pool-ripple ripple-three"></span>
+								<span class="wish-coin"></span>
 							</div>
+							<div class="wish-list" id="wishList"></div>
 						</div>
 					</div>
 				</section>
 
-				<section class="panel color3-alt certificate-panel">
-					<div class="intro color3">
+				<section class="panel certificate-panel">
+					<div class="intro">
 						<p class="kicker">Certificate</p>
 						<h2 class="major">生日认证书</h2>
 						<p>一张只在家里生效，却永久有效的认证书。盖章以后，请截图留念。</p>
@@ -431,17 +526,29 @@
 					</div>
 				</section>
 
-				<section class="panel color0 final-panel">
-					<div class="intro">
+				<section class="panel final-panel">
+					<div class="final-ambient" aria-hidden="true">
+						<span class="final-ribbon ribbon-one"></span>
+						<span class="final-ribbon ribbon-two"></span>
+						<span class="final-ribbon ribbon-three"></span>
+						<span class="final-spark" style="--x: 12%; --y: 18%; --s: 0.44rem; --d: 0s;"></span>
+						<span class="final-spark" style="--x: 23%; --y: 72%; --s: 0.3rem; --d: 1.8s;"></span>
+						<span class="final-spark" style="--x: 34%; --y: 26%; --s: 0.22rem; --d: 3.1s;"></span>
+						<span class="final-spark" style="--x: 46%; --y: 78%; --s: 0.36rem; --d: 0.7s;"></span>
+						<span class="final-spark" style="--x: 58%; --y: 22%; --s: 0.28rem; --d: 2.6s;"></span>
+						<span class="final-spark" style="--x: 69%; --y: 67%; --s: 0.42rem; --d: 1.2s;"></span>
+						<span class="final-spark" style="--x: 78%; --y: 33%; --s: 0.26rem; --d: 3.7s;"></span>
+						<span class="final-spark" style="--x: 87%; --y: 82%; --s: 0.32rem; --d: 2.1s;"></span>
+						<span class="final-spark" style="--x: 91%; --y: 14%; --s: 0.24rem; --d: 4.2s;"></span>
+					</div>
+					<div class="final-content">
 						<p class="kicker">For Bobo</p>
 						<h2 class="major">生日快乐，波波</h2>
 						<p>题目会继续增加，照片会慢慢补上。我们的编年史，也会一年一年往后写。</p>
-					</div>
-					<div class="inner">
 						<ul class="actions">
 							<li><a href="#wish" class="button primary color1">回到蛋糕</a></li>
 						</ul>
-						<p class="credit">Design adapted from <a href="https://html5up.net/ethereal">Ethereal by HTML5 UP</a>.</p>
+						<p class="credit">Designed by AI雨丝</p>
 					</div>
 				</section>
 
@@ -452,6 +559,7 @@
 		<script src="assets/js/browser.min.js"></script>
 		<script src="assets/js/breakpoints.min.js"></script>
 		<script src="assets/js/main.js"></script>
-		<script src="assets/js/bobo.js"></script>
+		<script src="assets/js/config.js?v=20260701-wishes"></script>
+		<script src="assets/js/bobo.js?v=20260701-polish3"></script>
 	</body>
 </html>

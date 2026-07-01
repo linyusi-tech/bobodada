@@ -6,6 +6,10 @@
 	var micButton = document.getElementById('micButton');
 	var manualBlowButton = document.getElementById('manualBlowButton');
 	var enterButton = document.getElementById('enterButton');
+	var birthdayMusic = document.getElementById('birthdayMusic');
+	var musicToggle = document.getElementById('musicToggle');
+	var musicWanted = true;
+	var musicVolume = 0.26;
 	var hasBlown = false;
 	var audioContext = null;
 	var micStream = null;
@@ -15,6 +19,56 @@
 
 	function setGateStatus(message) {
 		if (gateStatus) gateStatus.textContent = message;
+	}
+
+	function updateMusicButton() {
+		if (!musicToggle || !birthdayMusic) return;
+		var isPlaying = !birthdayMusic.paused && !birthdayMusic.muted && birthdayMusic.volume > 0;
+		musicToggle.classList.toggle('is-playing', isPlaying);
+		musicToggle.setAttribute('aria-pressed', isPlaying ? 'true' : 'false');
+		musicToggle.textContent = isPlaying ? '暂停音乐' : '播放音乐';
+	}
+
+	function startBirthdayMusic() {
+		if (!birthdayMusic || !musicWanted) return;
+		birthdayMusic.muted = false;
+		birthdayMusic.volume = musicVolume;
+		var playPromise = birthdayMusic.play();
+		if (playPromise && typeof playPromise.then === 'function') {
+			playPromise.then(updateMusicButton).catch(updateMusicButton);
+		} else {
+			updateMusicButton();
+		}
+	}
+
+	function primeBirthdayMusicSilently(event) {
+		if (!birthdayMusic || !musicWanted) return;
+		if (event && event.target && event.target.closest && event.target.closest('#musicToggle')) return;
+		if (!birthdayMusic.paused) return;
+		birthdayMusic.muted = true;
+		birthdayMusic.volume = 0;
+		var playPromise = birthdayMusic.play();
+		if (playPromise && typeof playPromise.then === 'function') {
+			playPromise.then(updateMusicButton).catch(updateMusicButton);
+		} else {
+			updateMusicButton();
+		}
+	}
+
+	function toggleBirthdayMusic() {
+		if (!birthdayMusic) return;
+		if (birthdayMusic.paused || birthdayMusic.muted || birthdayMusic.volume === 0) {
+			musicWanted = true;
+			startBirthdayMusic();
+		} else {
+			musicWanted = false;
+			birthdayMusic.pause();
+			updateMusicButton();
+		}
+	}
+
+	function primeBirthdayMusic(event) {
+		primeBirthdayMusicSilently(event);
 	}
 
 	function goToChronicle() {
@@ -28,6 +82,7 @@
 		if (hasBlown) return;
 		hasBlown = true;
 		body.classList.add('candles-out');
+		startBirthdayMusic();
 		setGateStatus(source === 'mic' ? '听见啦，蜡烛灭了。生日门已经打开。' : '蜡烛灭了。生日门已经打开。');
 		if (micStream) micStream.getTracks().forEach(function (track) { track.stop(); });
 		if (rafId) cancelAnimationFrame(rafId);
@@ -84,6 +139,7 @@
 	}
 
 	function startMic() {
+		primeBirthdayMusicSilently();
 		if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
 			setGateStatus('这个浏览器不支持麦克风识别，可以直接轻点吹灭。');
 			return;
@@ -107,40 +163,39 @@
 			});
 	}
 
+	if (birthdayMusic) {
+		birthdayMusic.addEventListener('play', updateMusicButton);
+		birthdayMusic.addEventListener('pause', updateMusicButton);
+		birthdayMusic.addEventListener('ended', updateMusicButton);
+	}
+	if (musicToggle) musicToggle.addEventListener('click', toggleBirthdayMusic);
+	document.addEventListener('pointerdown', primeBirthdayMusic, { once: true });
+	document.addEventListener('keydown', primeBirthdayMusic, { once: true });
 	if (micButton) micButton.addEventListener('click', startMic);
-	if (manualBlowButton) manualBlowButton.addEventListener('click', function () { blowOutCandles('manual'); });
+	if (manualBlowButton) manualBlowButton.addEventListener('click', function () {
+		blowOutCandles('manual');
+	});
 	if (enterButton) enterButton.addEventListener('click', function () {
+		startBirthdayMusic();
 		if (!hasBlown) setGateStatus('先偷看也可以，蜡烛等会儿再吹。');
 	});
+	updateMusicButton();
+	window.setTimeout(startBirthdayMusic, 450);
 
 	var memoryCards = Array.prototype.slice.call(document.querySelectorAll('.memory-card'));
 	var collectionHeart = document.getElementById('collectionHeart');
 	var collectedCount = document.getElementById('collectedCount');
 	var totalCards = document.getElementById('totalCards');
+	var resetProgressButton = document.getElementById('resetProgressButton');
+	var collectionFloat = document.getElementById('collectionFloat');
+	var floatCollectedCount = document.getElementById('floatCollectedCount');
+	var floatTotalCards = document.getElementById('floatTotalCards');
+	var collectionClose = document.getElementById('collectionClose');
+	var chroniclePanel = document.querySelector('.chronicle-panel');
 	var collectionKey = 'bobo-birthday-collected-cards';
-	var heartPositions = [
-		{ left: '31%', top: '16%', r: '-8deg' },
-		{ left: '42%', top: '12%', r: '5deg' },
-		{ left: '58%', top: '12%', r: '-4deg' },
-		{ left: '69%', top: '16%', r: '7deg' },
-		{ left: '24%', top: '30%', r: '6deg' },
-		{ left: '37%', top: '27%', r: '-5deg' },
-		{ left: '50%', top: '35%', r: '3deg' },
-		{ left: '63%', top: '27%', r: '-6deg' },
-		{ left: '76%', top: '30%', r: '5deg' },
-		{ left: '19%', top: '45%', r: '-7deg' },
-		{ left: '31%', top: '44%', r: '4deg' },
-		{ left: '43%', top: '48%', r: '-3deg' },
-		{ left: '57%', top: '48%', r: '6deg' },
-		{ left: '69%', top: '44%', r: '-5deg' },
-		{ left: '81%', top: '45%', r: '5deg' },
-		{ left: '28%', top: '60%', r: '5deg' },
-		{ left: '40%', top: '64%', r: '-6deg' },
-		{ left: '50%', top: '70%', r: '4deg' },
-		{ left: '60%', top: '64%', r: '-5deg' },
-		{ left: '72%', top: '60%', r: '-4deg' },
-		{ left: '50%', top: '84%', r: '2deg' }
-	];
+	var collectionScrim = null;
+	var collectionOriginalParent = null;
+	var collectionOriginalNext = null;
 
 	function getCollectedCards() {
 		try {
@@ -155,6 +210,26 @@
 
 	function saveCollectedCards(ids) {
 		localStorage.setItem(collectionKey, JSON.stringify(ids));
+	}
+
+	function resetCollectedCards() {
+		saveCollectedCards([]);
+		memoryCards.forEach(function (card) {
+			card.classList.remove('is-open', 'is-solved', 'is-wrong-pulse');
+			card.querySelectorAll('.choices button').forEach(function (button) {
+				button.disabled = false;
+				button.classList.remove('is-correct', 'is-wrong');
+			});
+			var feedback = card.querySelector('.answer-feedback');
+			if (feedback) feedback.remove();
+			var confetti = card.querySelector('.confetti-pop');
+			if (confetti) confetti.remove();
+		});
+		renderCollection();
+		if (resetProgressButton) {
+			resetProgressButton.textContent = '已重置';
+			window.setTimeout(function () { resetProgressButton.textContent = '重置调试'; }, 900);
+		}
 	}
 
 	function getCardTitle(card) {
@@ -227,22 +302,93 @@
 		window.setTimeout(function () { pop.remove(); }, 1100);
 	}
 
+	function getCollectionCard() {
+		return collectionHeart && collectionHeart.closest('.collection-card');
+	}
+
+	function ensureCollectionScrim() {
+		if (collectionScrim) return collectionScrim;
+		collectionScrim = document.createElement('div');
+		collectionScrim.className = 'collection-modal-scrim';
+		document.body.appendChild(collectionScrim);
+		collectionScrim.addEventListener('click', closeCollectionModal);
+		return collectionScrim;
+	}
+
+	function openCollectionModal() {
+		var card = getCollectionCard();
+		if (!card) return;
+		var scrim = ensureCollectionScrim();
+		if (!collectionOriginalParent) {
+			collectionOriginalParent = card.parentNode;
+			collectionOriginalNext = card.nextSibling;
+		}
+		if (card.parentNode !== document.body) document.body.appendChild(card);
+		card.classList.add('is-modal-open');
+		scrim.classList.add('is-visible');
+		document.body.classList.add('collection-modal-open');
+		if (collectionFloat) collectionFloat.setAttribute('aria-expanded', 'true');
+	}
+
+	function closeCollectionModal() {
+		var card = getCollectionCard();
+		if (card) {
+			card.classList.remove('is-modal-open');
+			if (collectionOriginalParent && card.parentNode === document.body) {
+				collectionOriginalParent.insertBefore(card, collectionOriginalNext);
+			}
+		}
+		if (collectionScrim) collectionScrim.classList.remove('is-visible');
+		document.body.classList.remove('collection-modal-open');
+		if (collectionFloat) collectionFloat.setAttribute('aria-expanded', 'false');
+	}
+
+	function updateCollectionFloatVisibility() {
+		if (!collectionFloat || !chroniclePanel) return;
+		var rect = chroniclePanel.getBoundingClientRect();
+		var horizontalVisible = rect.left < window.innerWidth * 0.75 && rect.right > window.innerWidth * 0.25;
+		var verticalVisible = rect.top < window.innerHeight * 0.75 && rect.bottom > window.innerHeight * 0.25;
+		var visible = horizontalVisible && verticalVisible;
+		collectionFloat.classList.toggle('is-visible', visible);
+	}
+
+	function shootCollectionBeam(card) {
+		updateCollectionFloatVisibility();
+		if (!collectionFloat) return;
+		var from = card.getBoundingClientRect();
+		var to = collectionFloat.getBoundingClientRect();
+		if (to.width === 0 || to.height === 0) return;
+
+		var beam = document.createElement('span');
+		beam.className = 'collection-beam';
+		beam.style.setProperty('--from-x', (from.left + from.width * 0.5) + 'px');
+		beam.style.setProperty('--from-y', (from.top + Math.min(from.height * 0.42, 260)) + 'px');
+		beam.style.setProperty('--to-x', (to.left + to.width * 0.5) + 'px');
+		beam.style.setProperty('--to-y', (to.top + to.height * 0.5) + 'px');
+		document.body.appendChild(beam);
+		collectionFloat.classList.remove('is-charging');
+		void collectionFloat.offsetWidth;
+		collectionFloat.classList.add('is-charging');
+		window.setTimeout(function () {
+			beam.remove();
+			collectionFloat.classList.remove('is-charging');
+		}, 1240);
+	}
+
 	function renderCollection() {
 		if (!collectionHeart) return;
 		var ids = getCollectedCards();
 		collectionHeart.innerHTML = '';
 		if (totalCards) totalCards.textContent = String(memoryCards.length);
 		if (collectedCount) collectedCount.textContent = String(ids.length);
+		if (floatTotalCards) floatTotalCards.textContent = String(memoryCards.length);
+		if (floatCollectedCount) floatCollectedCount.textContent = String(ids.length);
 
 		memoryCards.forEach(function (card, index) {
-			var position = heartPositions[index % heartPositions.length];
 			var slot = document.createElement('div');
 			var cardId = card.dataset.card;
 			var isCollected = ids.indexOf(cardId) !== -1;
 			slot.className = 'collection-slot' + (isCollected ? ' is-collected' : '');
-			slot.style.setProperty('--left', position.left);
-			slot.style.setProperty('--top', position.top);
-			slot.style.setProperty('--r', position.r);
 
 			if (isCollected && card.dataset.image) {
 				var image = document.createElement('img');
@@ -266,13 +412,14 @@
 				saveCollectedCards(ids);
 			}
 			renderCollection();
-			var collectionCard = collectionHeart && collectionHeart.closest('.collection-card');
+			var collectionCard = getCollectionCard();
 			if (collectionCard) {
 				collectionCard.classList.remove('is-flashing');
 				void collectionCard.offsetWidth;
 				collectionCard.classList.add('is-flashing');
 				window.setTimeout(function () { collectionCard.classList.remove('is-flashing'); }, 900);
 			}
+			shootCollectionBeam(card);
 		}
 
 	memoryCards.forEach(function (card) {
@@ -285,7 +432,7 @@
 			card.classList.add('is-open', 'is-solved');
 			correct.classList.add('is-correct');
 			buttons.forEach(function (item) { item.disabled = true; });
-			setAnswerFeedback(card, 'correct', '已经收进爱心相册。');
+			setAnswerFeedback(card, 'correct', '已经收进照片墙。');
 		}
 
 		buttons.forEach(function (button) {
@@ -297,7 +444,7 @@
 					button.classList.add('is-correct');
 					card.classList.add('is-open', 'is-solved');
 					buttons.forEach(function (item) { item.disabled = true; });
-					setAnswerFeedback(card, 'correct', '答对啦，照片已收进爱心相册。');
+					setAnswerFeedback(card, 'correct', '答对啦，照片墙又亮了一张。');
 					collectCard(card);
 					burstConfetti(card);
 				} else {
@@ -313,6 +460,16 @@
 	});
 
 	renderCollection();
+
+	if (resetProgressButton) resetProgressButton.addEventListener('click', resetCollectedCards);
+	if (collectionFloat) collectionFloat.addEventListener('click', openCollectionModal);
+	if (collectionClose) collectionClose.addEventListener('click', closeCollectionModal);
+	document.addEventListener('keydown', function (event) {
+		if (event.key === 'Escape') closeCollectionModal();
+	});
+	window.addEventListener('scroll', updateCollectionFloatVisibility, { passive: true });
+	window.addEventListener('resize', updateCollectionFloatVisibility);
+	updateCollectionFloatVisibility();
 
 	var questionText = document.getElementById('questionText');
 	var questionCard = document.getElementById('questionCard');
@@ -430,7 +587,10 @@
 	var wishInput = document.getElementById('wishInput');
 	var wishList = document.getElementById('wishList');
 	var wishPool = document.getElementById('wishPool');
+	var wishStatus = document.getElementById('wishStatus');
+	var wishSubmitButton = wishForm ? wishForm.querySelector('button[type="submit"]') : null;
 	var storageKey = 'bobo-birthday-wishes';
+	var wishDropTimer = null;
 
 	function getWishes() {
 		try {
@@ -456,6 +616,48 @@
 		});
 	}
 
+	function setWishStatus(message, type) {
+		if (!wishStatus) return;
+		wishStatus.textContent = message || '';
+		wishStatus.className = 'wish-status' + (type ? ' is-' + type : '');
+	}
+
+	function getWishApiUrl() {
+		var config = window.BOBO_BIRTHDAY_CONFIG || {};
+		if (wishForm && wishForm.dataset.wishApiUrl) return wishForm.dataset.wishApiUrl;
+		return config.wishApiUrl || '/api/wishes';
+	}
+
+	function submitWishToServer(value) {
+		if (!window.fetch) return Promise.reject(new Error('Current browser does not support fetch'));
+		return fetch(getWishApiUrl(), {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				wish: value,
+				source: 'birthday-site',
+				page: window.location.href
+			})
+		}).then(function (response) {
+			return response.json().catch(function () {
+				return {};
+			}).then(function (data) {
+				if (!response.ok || !data.ok) {
+					throw new Error(data.error || 'Wish API failed');
+				}
+				return data;
+			});
+		});
+	}
+
+	function setWishSubmitting(isSubmitting) {
+		if (!wishSubmitButton) return;
+		wishSubmitButton.disabled = isSubmitting;
+		wishSubmitButton.textContent = isSubmitting ? '正在许愿' : '许愿完毕';
+	}
+
 	if (wishForm) {
 		wishForm.addEventListener('submit', function (event) {
 			event.preventDefault();
@@ -469,8 +671,21 @@
 				wishPool.classList.remove('is-dropping');
 				void wishPool.offsetWidth;
 				wishPool.classList.add('is-dropping');
+				if (wishDropTimer) window.clearTimeout(wishDropTimer);
+				wishDropTimer = window.setTimeout(function () {
+					wishPool.classList.remove('is-dropping');
+				}, 2300);
 			}
 			wishInput.value = '';
+			setWishSubmitting(true);
+			setWishStatus('正在把愿望投进飞书愿望池。', 'saving');
+			submitWishToServer(value).then(function () {
+				setWishStatus('愿望已经投进飞书愿望池。', 'success');
+			}).catch(function () {
+				setWishStatus('本地已经收好，飞书暂时没有连上。', 'error');
+			}).finally(function () {
+				setWishSubmitting(false);
+			});
 		});
 	}
 
@@ -482,9 +697,72 @@
 
 	if (certButton && certificate) {
 		certButton.addEventListener('click', function () {
+			certificate.classList.remove('is-stamping');
+			void certificate.offsetWidth;
 			certificate.classList.add('is-sealed');
-			if (certSeal) certSeal.textContent = '已认证';
+			certificate.classList.add('is-stamping');
+			window.setTimeout(function () {
+				certificate.classList.remove('is-stamping');
+			}, 860);
+			if (certSeal) certSeal.setAttribute('aria-label', '已认证');
 		});
+	}
+
+	var finalPanel = document.querySelector('.final-panel');
+	var finalCelebrated = false;
+
+	function prefersReducedMotion() {
+		return window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+	}
+
+	function launchFinaleConfetti() {
+		if (!finalPanel || prefersReducedMotion()) return;
+		var colors = ['#ffe2a1', '#ffffff', '#f3a0c1', '#c6b7ff', '#ffd8e3'];
+		var burst = document.createElement('div');
+		burst.className = 'final-confetti-burst';
+
+		for (var i = 0; i < 32; i++) {
+			var piece = document.createElement('span');
+			var angle = (-150 + Math.random() * 300) * Math.PI / 180;
+			var distance = 130 + Math.random() * 300;
+			var dx = Math.cos(angle) * distance;
+			var dy = Math.sin(angle) * distance - 80 - Math.random() * 90;
+			piece.style.setProperty('--dx', dx.toFixed(1) + 'px');
+			piece.style.setProperty('--dy', dy.toFixed(1) + 'px');
+			piece.style.setProperty('--rot', (-240 + Math.random() * 520).toFixed(1) + 'deg');
+			piece.style.setProperty('--w', (0.28 + Math.random() * 0.34).toFixed(2) + 'rem');
+			piece.style.setProperty('--h', (0.62 + Math.random() * 0.72).toFixed(2) + 'rem');
+			piece.style.setProperty('--radius', Math.random() > 0.58 ? '999px' : '0.12rem');
+			piece.style.setProperty('--c', colors[i % colors.length]);
+			piece.style.setProperty('--delay', (Math.random() * 0.42).toFixed(2) + 's');
+			burst.appendChild(piece);
+		}
+
+		finalPanel.appendChild(burst);
+		window.setTimeout(function () { burst.remove(); }, 2900);
+	}
+
+	function revealFinalPanel() {
+		if (!finalPanel || finalCelebrated) return;
+		finalCelebrated = true;
+		finalPanel.classList.add('is-visible');
+		window.setTimeout(launchFinaleConfetti, 260);
+	}
+
+	if (finalPanel) {
+		if ('IntersectionObserver' in window) {
+			var finalObserver = new IntersectionObserver(function (entries) {
+				entries.forEach(function (entry) {
+					if (entry.isIntersecting && entry.intersectionRatio > 0.35) {
+						revealFinalPanel();
+						finalObserver.disconnect();
+					}
+				});
+			}, { threshold: [0.35, 0.58] });
+			finalObserver.observe(finalPanel);
+		} else {
+			finalPanel.classList.add('is-visible');
+		}
 	}
 
 	var wrapper = document.getElementById('wrapper');
