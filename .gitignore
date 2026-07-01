@@ -6,3 +6,4 @@ data/
 
 # Keep large local source asset out of GitHub Pages.
 images/certificate-bg.png
+images/exam-*.png
