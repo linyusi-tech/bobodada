@@ -3,3 +3,6 @@ tmp-screens/
 .env
 .env.local
 data/
+
+# Keep large local source asset out of GitHub Pages.
+images/certificate-bg.png

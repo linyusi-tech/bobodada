@@ -1770,7 +1770,7 @@ body.candles-out .cake-stage {
 	border-radius: 0.28rem;
 	background-image:
 		linear-gradient(180deg, rgba(255, 252, 242, 0.08), rgba(255, 252, 242, 0.02)),
-		url("../../images/certificate-bg.png");
+		url("../../images/certificate-bg.jpg");
 	background-position: center;
 	background-size: cover;
 	box-shadow:

@@ -180,7 +180,6 @@
 		if (!hasBlown) setGateStatus('先偷看也可以，蜡烛等会儿再吹。');
 	});
 	updateMusicButton();
-	window.setTimeout(startBirthdayMusic, 450);
 
 	var memoryCards = Array.prototype.slice.call(document.querySelectorAll('.memory-card'));
 	var collectionHeart = document.getElementById('collectionHeart');
