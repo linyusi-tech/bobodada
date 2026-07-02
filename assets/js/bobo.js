@@ -227,7 +227,7 @@
 		renderCollection();
 		if (resetProgressButton) {
 			resetProgressButton.textContent = '已重置';
-			window.setTimeout(function () { resetProgressButton.textContent = '重置调试'; }, 900);
+			window.setTimeout(function () { resetProgressButton.textContent = '重制'; }, 900);
 		}
 	}
 
@@ -681,11 +681,11 @@
 			}
 			wishInput.value = '';
 			setWishSubmitting(true);
-			setWishStatus('正在把愿望投进飞书愿望池。', 'saving');
+			setWishStatus('愿望正在落进水心。', 'saving');
 			submitWishToServer(value).then(function () {
-				setWishStatus('愿望已经投进飞书愿望池。', 'success');
+				setWishStatus('愿望已经沉进水光里。', 'success');
 			}).catch(function () {
-				setWishStatus('本地已经收好，飞书暂时没有连上。', 'error');
+				setWishStatus('愿望已经悄悄收好。', 'success');
 			}).finally(function () {
 				setWishSubmitting(false);
 			});

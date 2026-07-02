@@ -1553,7 +1553,7 @@ body.candles-out .cake-stage {
 	overflow: hidden;
 	background-color: #665988;
 	background-image:
-		linear-gradient(180deg, rgba(42, 32, 66, 0.16), rgba(42, 32, 66, 0.08) 46%, rgba(42, 32, 66, 0.28)),
+		linear-gradient(180deg, rgba(42, 32, 66, 0.02), rgba(42, 32, 66, 0.01) 48%, rgba(42, 32, 66, 0.1)),
 		url("../../images/wish-fountain-storybook.jpg"),
 		linear-gradient(145deg, #554a78, #b7789b);
 	background-position: center, center, center;
@@ -1580,18 +1580,19 @@ body.candles-out .cake-stage {
 .pool-basin {
 	position: absolute;
 	left: 50%;
-	top: 64%;
+	top: 65%;
 	z-index: 3;
-	width: min(28rem, 50%);
-	aspect-ratio: 2.35 / 1;
+	width: min(38rem, 62%);
+	aspect-ratio: 2.85 / 1;
 	transform: translate(-50%, -50%);
 	border-radius: 50%;
 	background:
-		radial-gradient(ellipse at 50% 48%, rgba(235, 250, 255, 0.86), rgba(140, 205, 239, 0.54) 32%, rgba(73, 116, 174, 0.48) 58%, rgba(42, 52, 104, 0.18) 74%, transparent 75%);
+		radial-gradient(ellipse at 50% 50%, rgba(216, 247, 255, 0.34) 0%, rgba(142, 219, 247, 0.22) 38%, rgba(84, 174, 224, 0.12) 61%, rgba(255, 255, 255, 0.04) 73%, transparent 80%);
 	border: 0;
+	opacity: 0.86;
 	box-shadow:
-		0 0 1.2rem rgba(208, 236, 255, 0.3),
-		inset 0 0 1.3rem rgba(75, 129, 194, 0.24);
+		0 0 1.2rem rgba(215, 244, 255, 0.12),
+		inset 0 0 1rem rgba(255, 255, 255, 0.12);
 }
 
 .pool-basin:before,
@@ -1615,7 +1616,8 @@ body.candles-out .cake-stage {
 	width: 24%;
 	aspect-ratio: 2.1 / 1;
 	border-radius: 50%;
-	border: 2px solid rgba(218, 239, 255, 0.82);
+	border: 3px solid rgba(224, 246, 255, 0.96);
+	box-shadow: 0 0 0.85rem rgba(214, 245, 255, 0.28);
 	opacity: 0;
 	transform: translate(-50%, -50%) scale(0.18);
 	pointer-events: none;
@@ -1650,7 +1652,7 @@ body.candles-out .cake-stage {
 }
 
 .wish-pool.is-dropping .wish-coin {
-	animation: wishCoinDrop 1.08s cubic-bezier(.15, .92, .16, 1) both;
+	animation: wishCoinDrop 1.34s cubic-bezier(.15, .92, .16, 1) both;
 }
 
 .wish-pool.is-dropping .pool-basin {
@@ -2085,14 +2087,18 @@ body.candles-out .cake-stage {
 @keyframes wishCoinDrop {
 	0% {
 		opacity: 0;
-		transform: translate(-50%, -14rem) rotateY(0deg) rotate(0deg) scale(0.82);
+		transform: translate(-50%, -15rem) rotateY(0deg) rotate(0deg) scale(0.82);
 	}
 	14% {
 		opacity: 1;
 	}
-	72% {
+	76% {
 		opacity: 1;
 		transform: translate(-50%, -50%) rotateY(680deg) rotate(18deg) scale(1);
+	}
+	88% {
+		opacity: 1;
+		transform: translate(-50%, -50%) rotateY(720deg) rotate(24deg) scale(0.9);
 	}
 	100% {
 		opacity: 0;
@@ -2374,6 +2380,14 @@ body.candles-out .cake-stage {
 		overflow-x: hidden;
 	}
 
+	#page-wrapper {
+		padding-bottom: 0 !important;
+	}
+
+	#wrapper {
+		margin-bottom: 0 !important;
+	}
+
 	#page-wrapper,
 	#wrapper,
 	.panel,
@@ -2509,12 +2523,12 @@ body.candles-out .cake-stage {
 	}
 
 	.exam-panel .intro h2.major {
-		font-size: 4.35rem;
+		font-size: 3.65rem;
 		line-height: 0.98;
 	}
 
 	.exam-title-main {
-		font-size: 1.08em;
+		font-size: 1.04em;
 	}
 
 	.exam-paper {
@@ -2690,8 +2704,8 @@ body.candles-out .cake-stage {
 	}
 
 	.pool-basin {
-		top: 64%;
-		width: 58%;
+		top: 65%;
+		width: 72%;
 	}
 
 	.pool-basin:before {
@@ -2716,6 +2730,9 @@ body.candles-out .cake-stage {
 
 	.final-panel {
 		min-width: 0;
+		min-height: 100vh;
+		min-height: 100dvh;
+		margin-bottom: 0 !important;
 		padding: 2rem 1.35rem;
 	}
 
@@ -2746,5 +2763,17 @@ body.candles-out .cake-stage {
 		animation-iteration-count: 1 !important;
 		scroll-behavior: auto !important;
 		transition-duration: 0.01ms !important;
+	}
+
+	.wish-pool.is-dropping .wish-coin {
+		animation-duration: 1.18s !important;
+	}
+
+	.wish-pool.is-dropping .pool-basin {
+		animation-duration: 520ms !important;
+	}
+
+	.wish-pool.is-dropping .pool-ripple {
+		animation-duration: 1.35s !important;
 	}
 }
