@@ -848,17 +848,18 @@ body.candles-out .cake-stage {
 }
 
 .exam-panel .intro h2.major {
-	max-width: 6.4em;
-	font-size: clamp(5.35rem, 6.6vw, 7.75rem);
-	line-height: 0.96;
+	max-width: 4.35em;
+	font-size: clamp(4.9rem, 5.45vw, 6.35rem);
+	line-height: 0.98;
 }
 
 .exam-title span {
 	display: block;
+	white-space: nowrap;
 }
 
 .exam-title-main {
-	font-size: 1.12em;
+	font-size: 1em;
 }
 
 .exam-panel .intro p:not(.kicker) {
@@ -1058,9 +1059,10 @@ body.candles-out .cake-stage {
 	top: 50%;
 	z-index: 9810;
 	width: min(58rem, calc(100vw - 3rem));
-	max-height: min(84vh, 46rem);
+	max-height: min(88vh, 48rem);
 	min-height: min(76vh, 38rem);
 	padding: clamp(1.65rem, 2.8vw, 2.35rem);
+	gap: clamp(0.72rem, 1.5vh, 1rem);
 	transform: translate(-50%, -50%) scale(1);
 	background:
 		linear-gradient(135deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0.065)),
@@ -1078,6 +1080,10 @@ body.candles-out .cake-stage {
 }
 
 .collection-card.is-modal-open .collection-heart {
+	width: min(50rem, 100%);
+}
+
+.collection-card.is-modal-open .collection-progress-row {
 	width: min(50rem, 100%);
 }
 
@@ -1133,6 +1139,15 @@ body.candles-out .cake-stage {
 	line-height: 1.68;
 }
 
+.collection-progress-row {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 1rem;
+	width: min(46rem, 100%);
+	margin: 0 auto;
+}
+
 .collection-meter {
 	display: flex;
 	align-items: baseline;
@@ -1154,7 +1169,8 @@ body.candles-out .cake-stage {
 }
 
 .reset-progress-button {
-	align-self: flex-start;
+	flex: 0 0 auto;
+	align-self: center;
 	min-height: 2.35rem;
 	padding: 0.58rem 0.82rem;
 	border-radius: 999px;
@@ -1580,14 +1596,16 @@ body.candles-out .cake-stage {
 .pool-basin {
 	position: absolute;
 	left: 50%;
-	top: 65%;
+	top: 75%;
 	z-index: 3;
-	width: min(38rem, 62%);
-	aspect-ratio: 2.85 / 1;
+	width: 94%;
+	aspect-ratio: 5.4 / 1;
+	--pool-ripple-aspect: 5.4 / 1;
+	--pool-ripple-max: 92%;
 	transform: translate(-50%, -50%);
 	border-radius: 50%;
 	background:
-		radial-gradient(ellipse at 50% 50%, rgba(216, 247, 255, 0.34) 0%, rgba(142, 219, 247, 0.22) 38%, rgba(84, 174, 224, 0.12) 61%, rgba(255, 255, 255, 0.04) 73%, transparent 80%);
+		radial-gradient(ellipse at 50% 50%, rgba(216, 247, 255, 0.3) 0%, rgba(142, 219, 247, 0.18) 42%, rgba(84, 174, 224, 0.1) 64%, rgba(255, 255, 255, 0.035) 76%, transparent 84%);
 	border: 0;
 	opacity: 0.86;
 	box-shadow:
@@ -1613,13 +1631,13 @@ body.candles-out .cake-stage {
 	left: 50%;
 	top: 50%;
 	z-index: 5;
-	width: 24%;
-	aspect-ratio: 2.1 / 1;
+	width: var(--pool-ripple-max);
+	aspect-ratio: var(--pool-ripple-aspect);
 	border-radius: 50%;
 	border: 3px solid rgba(224, 246, 255, 0.96);
 	box-shadow: 0 0 0.85rem rgba(214, 245, 255, 0.28);
 	opacity: 0;
-	transform: translate(-50%, -50%) scale(0.18);
+	transform: translate(-50%, -50%) scale(0.1);
 	pointer-events: none;
 }
 
@@ -2121,11 +2139,11 @@ body.candles-out .cake-stage {
 @keyframes wishRipple {
 	0% {
 		opacity: 0.92;
-		transform: translate(-50%, -50%) scale(0.18);
+		transform: translate(-50%, -50%) scale(0.1);
 	}
 	100% {
 		opacity: 0;
-		transform: translate(-50%, -50%) scale(4.4);
+		transform: translate(-50%, -50%) scale(1);
 	}
 }
 
@@ -2528,7 +2546,7 @@ body.candles-out .cake-stage {
 	}
 
 	.exam-title-main {
-		font-size: 1.04em;
+		font-size: 1em;
 	}
 
 	.exam-paper {
@@ -2633,6 +2651,15 @@ body.candles-out .cake-stage {
 		font-size: 2.7rem;
 	}
 
+	.collection-progress-row {
+		width: min(32rem, 88vw);
+		gap: 0.75rem;
+	}
+
+	.collection-meter strong {
+		font-size: 2.35rem;
+	}
+
 	.collection-heart {
 		width: min(32rem, 88vw);
 		aspect-ratio: 7 / 4;
@@ -2704,8 +2731,10 @@ body.candles-out .cake-stage {
 	}
 
 	.pool-basin {
-		top: 65%;
-		width: 72%;
+		top: 70.5%;
+		width: 166%;
+		aspect-ratio: 5.1 / 1;
+		--pool-ripple-aspect: 5.1 / 1;
 	}
 
 	.pool-basin:before {

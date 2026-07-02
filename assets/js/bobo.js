@@ -86,7 +86,6 @@
 		setGateStatus(source === 'mic' ? '听见啦，蜡烛灭了。生日门已经打开。' : '蜡烛灭了。生日门已经打开。');
 		if (micStream) micStream.getTracks().forEach(function (track) { track.stop(); });
 		if (rafId) cancelAnimationFrame(rafId);
-		window.setTimeout(goToChronicle, 900);
 	}
 
 	function listenForBlow() {
@@ -227,7 +226,7 @@
 		renderCollection();
 		if (resetProgressButton) {
 			resetProgressButton.textContent = '已重置';
-			window.setTimeout(function () { resetProgressButton.textContent = '重制'; }, 900);
+			window.setTimeout(function () { resetProgressButton.textContent = '重置'; }, 900);
 		}
 	}
 
