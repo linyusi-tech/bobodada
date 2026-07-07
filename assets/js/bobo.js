@@ -10,6 +10,7 @@
 	var musicToggle = document.getElementById('musicToggle');
 	var musicWanted = true;
 	var musicVolume = 0.26;
+	var musicSourcesLoaded = false;
 	var hasBlown = false;
 	var audioContext = null;
 	var micStream = null;
@@ -29,8 +30,25 @@
 		musicToggle.textContent = isPlaying ? '暂停音乐' : '播放音乐';
 	}
 
+	function ensureBirthdayMusicSources() {
+		if (!birthdayMusic || musicSourcesLoaded) return;
+		var sources = [
+			{ src: birthdayMusic.dataset.mp3Src, type: 'audio/mpeg' },
+			{ src: birthdayMusic.dataset.m4aSrc, type: 'audio/mp4' }
+		];
+		sources.forEach(function (sourceData) {
+			if (!sourceData.src) return;
+			var source = document.createElement('source');
+			source.src = sourceData.src;
+			source.type = sourceData.type;
+			birthdayMusic.appendChild(source);
+		});
+		musicSourcesLoaded = true;
+	}
+
 	function startBirthdayMusic() {
 		if (!birthdayMusic || !musicWanted) return;
+		ensureBirthdayMusicSources();
 		birthdayMusic.muted = false;
 		birthdayMusic.volume = musicVolume;
 		var playPromise = birthdayMusic.play();
@@ -45,6 +63,7 @@
 		if (!birthdayMusic || !musicWanted) return;
 		if (event && event.target && event.target.closest && event.target.closest('#musicToggle')) return;
 		if (!birthdayMusic.paused) return;
+		ensureBirthdayMusicSources();
 		birthdayMusic.muted = true;
 		birthdayMusic.volume = 0;
 		var playPromise = birthdayMusic.play();

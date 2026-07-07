@@ -15,10 +15,14 @@
 		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
 	</head>
 	<body class="is-preload">
-		<audio id="birthdayMusic" loop preload="none" playsinline>
-			<source src="audio/bobo-birthday-sparkle.mp3" type="audio/mpeg" />
-			<source src="audio/bobo-birthday-sparkle.m4a" type="audio/mp4" />
-		</audio>
+		<audio
+			id="birthdayMusic"
+			loop
+			preload="none"
+			playsinline
+			data-mp3-src="audio/bobo-birthday-sparkle.mp3"
+			data-m4a-src="audio/bobo-birthday-sparkle.m4a"
+		></audio>
 		<button class="music-toggle" id="musicToggle" type="button" aria-pressed="false">播放音乐</button>
 		<div id="page-wrapper">
 			<div id="wrapper">
@@ -574,6 +578,6 @@
 		<script src="assets/js/breakpoints.min.js"></script>
 		<script src="assets/js/main.js"></script>
 		<script src="assets/js/config.js?v=20260701-wishes"></script>
-		<script src="assets/js/bobo.js?v=20260702-fountain1"></script>
+		<script src="assets/js/bobo.js?v=20260707-lazy-audio1"></script>
 	</body>
 </html>
